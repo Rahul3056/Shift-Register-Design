@@ -1,0 +1,44 @@
+
+#### **Example Verilog Code for 4-bit SISO Shift Register (Right Shift)**  
+```verilog
+module shift_register (
+    input wire clk,
+    input wire data_in,
+    output reg [3:0] Q
+);
+    always @(posedge clk)
+        Q <= {Q[2:0], data_in};  // Shift right
+endmodule
+```
+
+#### **Testbench Code**  
+```verilog
+module testbench;
+    reg clk, data_in;
+    wire [3:0] Q;
+
+    shift_register uut (.clk(clk), .data_in(data_in), .Q(Q));
+
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk;  // Generate clock with a 10-time unit period
+    end
+
+    initial begin
+        $monitor("Time=%0t | Data_In=%b | Q=%b", $time, data_in, Q);
+        data_in = 1; #10;
+        data_in = 1; #10;
+        data_in = 1; #10;
+        data_in = 1; #10;
+        $finish;
+    end
+endmodule
+```
+
+#### **Simulation Output (Console Log Example)**  
+```
+Time=0   | Data_In=1 | Q=0000  
+Time=10  | Data_In=1 | Q=0001  
+Time=20  | Data_In=1 | Q=0011  
+Time=30  | Data_In=1 | Q=0111  
+Time=
